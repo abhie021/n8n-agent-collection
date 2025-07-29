@@ -1,0 +1,176 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        -64,
+        -80
+      ],
+      "id": "5a848fc6-dbf0-4285-8d50-c39f65374025",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -80,
+        160
+      ],
+      "id": "693db97e-bc19-456d-9eae-4ddae6876243",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        112
+      ],
+      "id": "a42f2006-8787-42d8-bde9-cb9dc633d813",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "0U4yhbo3LKGmVw2G",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Getting Weather Information.",
+        "url": "https://api.open-meteo.com/v1/forecast?latitude=18.52&longitude=73.87&daily=sunrise,daylight_duration,rain_sum&hourly=temperature_2m&forecast_days=3&temperature_unit=fahrenheit",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        48,
+        160
+      ],
+      "id": "13d8d6cb-4311-4e1c-afb9-a1d5cec4b25c",
+      "name": "Get_Weather"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Sends weather report Email.",
+        "sendTo": "abhimurkute021@gmail.com",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', `3-4 word subject line that give a sneak peak of the weather report and makes the email enticing to click on.\n`, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', `A unique weather report message.`, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        224,
+        160
+      ],
+      "id": "54f3f970-a568-40b7-8389-1ac441f9e042",
+      "name": "Send Email",
+      "webhookId": "abd91023-c05d-4d20-8b5c-976fcc633cf9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "LXj4Qx4gHHsoRkqE",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -288,
+        -64
+      ],
+      "id": "49212653-2922-4918-8975-0fbc13392ee8",
+      "name": "Chat Input",
+      "webhookId": "2899df54-9666-4ef0-8cce-b29be31af6fc"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_Weather": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat Input": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "fda5bd1b-26c3-4e1c-8d43-be6d62c6469b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "08766122004343ef3fdab2007838288ef5dced49b2d6c169cd680575ef573bc2"
+  },
+  "id": "8AMoHBSLubdZRFfC",
+  "tags": []
+}
